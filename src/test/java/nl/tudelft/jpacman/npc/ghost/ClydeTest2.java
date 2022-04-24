@@ -56,7 +56,7 @@ public class ClydeTest2 {
 		//Arrange
 		List<String> text = Lists.newArrayList(
 				"##############",
-				"#.#....G.....P",
+				"#.#....C.....P",
 				"##############");
 		Level level = mapParser.parseMap(text);
 		

@@ -97,6 +97,10 @@ style.excludePackages = [
 style.excludeClasses = [
 ]
 
+//jacocoTestReport.dependsOn({
+//    defaultTest
+//    test
+//})
 jacocoTestReport {
     executionData tasks.withType(Test)
     reports {
