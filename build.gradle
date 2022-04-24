@@ -97,6 +97,13 @@ style.excludePackages = [
 style.excludeClasses = [
 ]
 
+jacocoTestReport {
+    executionData tasks.withType(Test)
+    reports {
+        csv.enabled true
+    }
+}
+
 task staticAnalysis(type: GradleBuild) {
     tasks = [
         'clean',
