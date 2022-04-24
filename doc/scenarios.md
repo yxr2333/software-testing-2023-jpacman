@@ -117,7 +117,7 @@ Scenario S3.3: The ghost leaves a cell with a pellet.
 Given a ghost is on a cell with a pellet (see S3.2);
 When  a tick even occurs;
 Then  the ghost can move away from the cell with the pellet,
- and  the pellet on that cell is is visible again.
+ and  the pellet on that cell is visible again.
 
 Scenario S3.4: The player dies.
 Given the game has started,

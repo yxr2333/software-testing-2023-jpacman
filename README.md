@@ -28,7 +28,7 @@ Main contributors:
 3. Select 'Gradle' in the following screen as external model, and click 'Next'
 4. In the next screen, optionally adjust the Gradle options and click 'Finish'
 5. To see JPacman in action: run `nl.tudelft.jpacman.Launcher`
-5. To run the test suite in IntelliJ: right click on a test or directory -> `Run` or `Run ...Test`
+5. To run the test suite in IntelliJ: right-click on a test or directory -> `Run` or `Run ...Test`
 
 ### Command line
 1. Git clone the project

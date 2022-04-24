@@ -102,10 +102,11 @@ public class Clyde extends Ghost {
         Square target = nearest.getSquare();
 
         List<Direction> path = Navigation.shortestPath(getSquare(), target, this);
+        
         if (path != null && !path.isEmpty()) {
             Direction direction = path.get(0);
             if (path.size() <= SHYNESS) {
-                return Optional.ofNullable(OPPOSITES.get(direction));
+                 return Optional.ofNullable(OPPOSITES.get(direction));
             }
             return Optional.of(direction);
         }

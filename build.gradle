@@ -1,13 +1,14 @@
 plugins {
     id 'application'
     id 'java'
-    id 'jacoco'
-    id 'checkstyle'
+    id 'eclipse'
     id 'pmd'
-    id 'com.github.spotbugs' version '1.7.1'
+    id "com.github.spotbugs" version "$spotbugspluginVersion"
+    
 }
 
 sourceSets {
+
     defaultTest {
         java {
             compileClasspath += main.output + test.output
@@ -15,6 +16,7 @@ sourceSets {
             srcDir file('src/default-test/java')
         }
         resources.srcDir file('src/default-test/resources')
+        
     }
 }
 
@@ -22,51 +24,58 @@ configurations {
     defaultTestCompile.extendsFrom testCompile
     defaultTestImplementation.extendsFrom testImplementation
     defaultTestRuntime.extendsFrom testRuntime
+    
+    cucumberRuntime {
+        extendsFrom testImplementation
+    }
 }
 
 repositories {
+    mavenLocal()
+    maven{url 'https://maven.aliyun.com/repository/public'}
+    // Use Maven Central for resolving dependencies.
     mavenCentral()
 }
 
 dependencies {
-    compile "com.google.guava:guava:$guavaVersion"
+    implementation "com.google.guava:guava:$guavaVersion"
 
     compileOnly "com.github.spotbugs:spotbugs-annotations:$spotbugsAnnotationsVersion"
 
     testImplementation "org.junit.jupiter:junit-jupiter:$junitVersion"
-    testCompile "org.mockito:mockito-core:$mockitoVersion"
-    testCompile "org.assertj:assertj-core:$assertjVersion"
+    testImplementation("org.assertj:assertj-core:$assertJVersion")
+    testImplementation("org.mockito:mockito-core:$mockitoVersion")
+
+    testImplementation "io.cucumber:cucumber-java:$cucumberVersion"
+    testImplementation "io.cucumber:cucumber-junit:$cucumberVersion"
+
+    spotbugsPlugins "com.h3xstream.findsecbugs:findsecbugs-plugin:$findsecbugspluginVersion"
 }
 
 task defaultTest(type: Test) {
     testClassesDirs = sourceSets.defaultTest.output.classesDirs
     classpath = sourceSets.defaultTest.runtimeClasspath
 }
-test.dependsOn defaultTest
-
-test {
-    useJUnitPlatform()
-    finalizedBy jacocoTestReport
-}
 
 defaultTest {
     useJUnitPlatform()
 }
+//test.dependsOn defaultTest
 
-jacoco {
-    toolVersion = jacocoVersion
+tasks.named('test') {
+    // Use JUnit Platform for unit tests.
+    useJUnitPlatform()
 }
 
-jacocoTestReport {
-    executionData tasks.withType(Test)
-    reports {
-        csv.enabled true
+task cucumber() {
+    dependsOn assemble, compileTestJava
+    doLast {
+        javaexec {
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            args = ['--plugin', 'pretty', '--glue', 'nl.tudelft.jpacman.e2e.framework', 'src/test/resources']
+        }
     }
-}
-
-checkstyle {
-    configFile file("checkstyle.xml")
-    ignoreFailures = false
 }
 
 pmd {
@@ -74,12 +83,19 @@ pmd {
     ruleSets = []
 }
 
-tasks.withType(com.github.spotbugs.SpotBugsTask) {
-    reports {
-        xml.enabled = false
-        html.enabled = true
-    }
-}
+apply from: "$rootDir/gradle/config/scripts/style.gradle"
+apply from: "$rootDir/gradle/config/scripts/coverage.gradle"
+coverage.excludePackages = [
+]
+
+coverage.excludeClasses = [
+]
+
+style.excludePackages = [
+]
+
+style.excludeClasses = [
+]
 
 task staticAnalysis(type: GradleBuild) {
     tasks = [
@@ -94,6 +110,43 @@ task staticAnalysis(type: GradleBuild) {
         'spotbugsTest',
         'spotbugsDefaultTest',
     ]
+}
+
+spotbugs {
+    toolVersion = "$spotbugsVersion"
+    ignoreFailures = false
+    showStackTraces = true
+    showProgress = true
+    effort = 'default'
+    reportLevel = 'low'
+    reportsDir = file("$buildDir/reports/spotbugs")
+//    onlyAnalyze = [ 'mimic.*' ]
+    maxHeapSize = '2g'
+    extraArgs = [ '-nested:false' ]
+    jvmArgs = [ '-Duser.language=en' ]
+}
+
+spotbugsTest {
+    reports {
+        html {
+            stylesheet = 'fancy-hist.xsl'
+        }
+    }
+}
+spotbugsMain {
+    reports {
+        html {
+            stylesheet = 'fancy-hist.xsl'
+        }
+    }
+}
+
+spotbugsDefaultTest {
+    reports {
+        html {
+            stylesheet = 'fancy-hist.xsl'
+        }
+    }
 }
 
 mainClassName = 'nl.tudelft.jpacman.Launcher'
