@@ -56,6 +56,9 @@ task defaultTest(type: Test) {
     classpath = sourceSets.defaultTest.runtimeClasspath
 }
 
+tasks.withType(JavaCompile){
+    options.encoding("utf-8")
+}
 defaultTest {
     useJUnitPlatform()
 }
