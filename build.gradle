@@ -8,7 +8,6 @@ plugins {
 }
 
 sourceSets {
-
     defaultTest {
         java {
             compileClasspath += main.output + test.output
