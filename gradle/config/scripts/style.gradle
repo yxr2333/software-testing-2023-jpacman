@@ -12,7 +12,7 @@ checkstyle {
     toolVersion = checkstyleVersion
 }
 
-checkstyleTest.enabled = false
+checkstyleTest.enabled = true
 
 checkstyleMain.doFirst {
     style.excludePackages.each() {
