@@ -158,4 +158,21 @@ task staticAnalysis(type: GradleBuild) {
 //    }
 //}
 
+
 mainClassName = 'nl.tudelft.jpacman.Launcher'
+jar {
+    archivesBaseName = 'Jpacman'//基本的文件名
+    archiveVersion = '0.0.3' //版本
+    manifest { //配置jar文件的manifest
+        attributes(
+                "Manifest-Version": 1.0,
+                'Main-Class': 'nl.tudelft.jpacman.Launcher' //指定main方法所在的文件
+        )
+    }
+    //打包依赖包
+    from {
+        (configurations.runtimeClasspath).collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+}
