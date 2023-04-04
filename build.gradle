@@ -3,7 +3,8 @@ plugins {
     id 'java'
     id 'eclipse'
     id 'pmd'
-//    id "com.github.spotbugs" version "$spotbugspluginVersion"
+    id "com.github.spotbugs" version "$spotbugspluginVersion"
+    id "info.solidsoft.pitest" version "1.7.4"
     
 }
 
@@ -48,7 +49,7 @@ dependencies {
     testImplementation "io.cucumber:cucumber-java:$cucumberVersion"
     testImplementation "io.cucumber:cucumber-junit:$cucumberVersion"
 
-//    spotbugsPlugins "com.h3xstream.findsecbugs:findsecbugs-plugin:$findsecbugspluginVersion"
+    spotbugsPlugins "com.h3xstream.findsecbugs:findsecbugs-plugin:$findsecbugspluginVersion"
 }
 
 task defaultTest(type: Test) {
@@ -121,42 +122,42 @@ task staticAnalysis(type: GradleBuild) {
     ]
 }
 
-//spotbugs {
-//    toolVersion = "$spotbugsVersion"
-//    ignoreFailures = false
-//    showStackTraces = true
-//    showProgress = true
-//    effort = 'default'
-//    reportLevel = 'low'
-//    reportsDir = file("$buildDir/reports/spotbugs")
-////    onlyAnalyze = [ 'mimic.*' ]
-//    maxHeapSize = '2g'
-//    extraArgs = [ '-nested:false' ]
-//    jvmArgs = [ '-Duser.language=en' ]
-//}
-//
-//spotbugsTest {
-//    reports {
-//        html {
-//            stylesheet = 'fancy-hist.xsl'
-//        }
-//    }
-//}
-//spotbugsMain {
-//    reports {
-//        html {
-//            stylesheet = 'fancy-hist.xsl'
-//        }
-//    }
-//}
-//
-//spotbugsDefaultTest {
-//    reports {
-//        html {
-//            stylesheet = 'fancy-hist.xsl'
-//        }
-//    }
-//}
+spotbugs {
+    toolVersion = "$spotbugsVersion"
+    ignoreFailures = false
+    showStackTraces = true
+    showProgress = true
+    effort = 'default'
+    reportLevel = 'low'
+    reportsDir = file("$buildDir/reports/spotbugs")
+//    onlyAnalyze = [ 'mimic.*' ]
+    maxHeapSize = '2g'
+    extraArgs = [ '-nested:false' ]
+    jvmArgs = [ '-Duser.language=en' ]
+}
+
+spotbugsTest {
+    reports {
+        html {
+            stylesheet = 'fancy-hist.xsl'
+        }
+    }
+}
+spotbugsMain {
+    reports {
+        html {
+            stylesheet = 'fancy-hist.xsl'
+        }
+    }
+}
+
+spotbugsDefaultTest {
+    reports {
+        html {
+            stylesheet = 'fancy-hist.xsl'
+        }
+    }
+}
 
 
 mainClassName = 'nl.tudelft.jpacman.Launcher'
@@ -175,4 +176,12 @@ jar {
             it.isDirectory() ? it : zipTree(it)
         }
     }
+}
+
+pitest {
+    targetClasses = ['nl.tudelft.jpacman.board.*']
+    threads = 4
+    outputFormats = ['HTML']
+    timestampedReports = true
+    junit5PluginVersion = '0.15'
 }
