@@ -48,7 +48,7 @@ public class LauncherSmokeTest {
     /**
      * Launch the game, and imitate what would happen in a typical game.
      * The test is only a smoke test, and not a focused small test.
-     * Therefore it is OK that the method is a bit too long.
+     * Therefore, it is OK that the method is a bit too long.
      *
      * @throws InterruptedException Since we're sleeping in this test.
      */

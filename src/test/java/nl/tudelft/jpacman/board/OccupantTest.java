@@ -1,6 +1,8 @@
 package nl.tudelft.jpacman.board;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,10 +33,17 @@ class OccupantTest {
      */
     @Test
     void noStartSquare() {
-        // Remove the following placeholder:
-        assertThat(unit).isNotNull();
-        assertThat(unit.hasSquare()).isFalse();
-        
+        // Create a new instance of the BasicSquare class
+        Square square = new BasicSquare();
+
+        // Occupy the square with the unit
+        unit.occupy(square);
+
+        // Assert that the unit's square is equal to the occupied square
+        assertThat(unit.getSquare()).isEqualTo(square);
+
+        // Assert that the square contains the unit as an occupant
+        assertThat(square.getOccupants()).contains(unit);
     }
 
     /**
@@ -48,6 +57,20 @@ class OccupantTest {
     	
     	assertThat(unit.getSquare()).isEqualTo(square);
     	assertThat(square.getOccupants()).contains(unit);
+    }
+
+    /**
+     * Tests that a unit can reoccupy a square that it already occupies.
+     */
+    @Test
+    void testReoccupy() {
+        Square square = new BasicSquare();
+        unit.occupy(square);
+        unit.occupy(square);
+
+        assertThat(unit.getSquare()).isEqualTo(square);
+        assertThat(square.getOccupants()).contains(unit);
+        assertThat(square.getOccupants()).hasSize(1);
     }
 
 }
