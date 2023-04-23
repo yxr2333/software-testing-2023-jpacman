@@ -35,7 +35,7 @@ public class SinglePlayerGame extends Game {
      * @param pointCalculator
      *            The way to calculate points upon collisions.
      */
-    protected SinglePlayerGame(Player player, Level level, PointCalculator pointCalculator) {
+    public SinglePlayerGame(Player player, Level level, PointCalculator pointCalculator) {
         super(pointCalculator);
 
         assert player != null;
