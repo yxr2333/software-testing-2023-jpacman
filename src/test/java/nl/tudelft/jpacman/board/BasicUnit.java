@@ -7,7 +7,7 @@ import nl.tudelft.jpacman.sprite.Sprite;
  *
  * @author Jeroen Roosen 
  */
-class BasicUnit extends Unit {
+public class BasicUnit extends Unit {
 
     /**
      * Creates a new basic unit.
